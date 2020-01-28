@@ -2,31 +2,56 @@ use wasm_bindgen::prelude::*;
 
 use sharks::{Share, Sharks};
 
-// For a given secret and minimum shares threshold, generate n_shares.
 #[wasm_bindgen]
-pub fn generate_shares(n_shares: u8, threshold: u8, secret: &[u8]) -> JsValue {
-    let sharks = Sharks(threshold);
-    let dealer = sharks.dealer(secret);
-    let shares: Vec<Vec<u8>> = dealer
-        .take(n_shares as usize)
-        .map(|s| (&s).into())
-        .collect();
+pub struct SharksJS(Sharks);
 
-    JsValue::from_serde(&shares).expect("A Vec<Vec<u8>> should always be JSON serializable.")
+#[wasm_bindgen]
+impl SharksJS {
+    pub fn new(threshold: u8) -> SharksJS {
+        SharksJS(Sharks(threshold))
+    }
+
+    pub fn deal(&self, secret: &[u8], n_shares: usize) -> JsValue {
+        let shares: Vec<Vec<u8>> = self
+            .0
+            .dealer(secret)
+            .take(n_shares)
+            .map(|s| (&s).into())
+            .collect();
+        JsValue::from_serde(&shares).unwrap()
+    }
+
+    pub fn recover(&self, shares: JsValue) -> Result<Vec<u8>, JsValue> {
+        let shares: Vec<Vec<u8>> = shares.into_serde().map_err(|e| e.to_string())?;
+        let shares: Vec<Share> = shares.iter().map(|s| s.as_slice().into()).collect();
+
+        self.0.recover(shares.as_slice()).map_err(JsValue::from)
+    }
 }
 
-// Given shares and the minimum threshold, recover the original secret.
-#[wasm_bindgen]
-pub fn recover(threshold: u8, shares: JsValue) -> Vec<u8> {
-    let sharks = Sharks(threshold);
+#[cfg(test)]
+mod tests {
+    use wasm_bindgen::prelude::JsValue;
+    use wasm_bindgen_test::*;
 
-    let shares: Vec<Vec<u8>> = shares
-        .into_serde()
-        .expect("will implement proper error handling later");
+    use super::SharksJS;
 
-    let shares: Vec<Share> = shares.iter().map(|s| s.as_slice().into()).collect();
-    sharks
-        .recover(&shares)
-        .expect("will implement proper error handling later")
-        .into()
+    #[wasm_bindgen_test]
+    fn test_recover_errors() {
+        let sharks = SharksJS::new(3);
+        let secret = sharks.recover(JsValue::from(1));
+        assert!(secret.is_err());
+
+        let shares = sharks.deal(&[1], 2);
+        let secret = sharks.recover(shares);
+        assert!(secret.is_err());
+    }
+
+    #[wasm_bindgen_test]
+    fn test_integration_works() {
+        let sharks = SharksJS::new(3);
+        let shares = sharks.deal(&[1, 2, 3, 4], 255);
+        let secret = sharks.recover(shares).unwrap();
+        assert_eq!(secret, vec![1, 2, 3, 4]);
+    }
 }

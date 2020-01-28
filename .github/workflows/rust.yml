@@ -27,9 +27,12 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - run: rustup target add wasm32-unknown-unknown
       - uses: actions-rs/cargo@v1
         with:
-          command: test
+          command: install
+          args: wasm-pack
+      - run: ~/.cargo/bin/wasm-pack test --node
 
   format:
     name: Format
@@ -57,10 +60,9 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - run: rustup component add clippy
-      - uses: actions-rs/cargo@v1
+      - uses: actions-rs/clippy-check@v1
         with:
-          command: clippy
+          token: ${{ secrets.GITHUB_TOKEN }}
           args: -- -D warnings
 
   coverage:
@@ -76,7 +78,7 @@ jobs:
       - uses: actions-rs/tarpaulin@v0.1
       - uses: codecov/codecov-action@v1.0.5
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   security:
     name: Security

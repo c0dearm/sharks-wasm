@@ -12,20 +12,19 @@ Documentation:
 ## Usage
 
 ```
-import {generate_shares, recover} from "sharks";
+const sharks_wasm = require('sharks_wasm');
 
-var secret = Uint8Array.of(1, 2, 3, 4)
-var shares = generate_shares(5, 3, secret);
-
-var recovered_secret = recover(3, shares);
-alert(recovered_secret);
+const sharks = sharks_wasm.SharksJS.new(3);
+const shares = sharks.deal([1, 2, 3, 4], 255);
+const secret = sharks.recover(shares);
+console.log(secret);
 ```
 
 ## Building and testing
 
 1. Install [wasm-pack](https://crates.io/crates/wasm-pack): `cargo install wasm-pack`
 2. Build: `wasm-pack build`
-3. Test: `wasm-pack test`
+3. Test: `wasm-pack test --node`
 
 # Contributing
 
