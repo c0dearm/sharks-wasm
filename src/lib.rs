@@ -28,5 +28,4 @@ pub fn recover(threshold: u8, shares: JsValue) -> Vec<u8> {
     sharks
         .recover(&shares)
         .expect("will implement proper error handling later")
-        .into()
 }
