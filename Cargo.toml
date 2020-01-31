@@ -22,3 +22,6 @@ wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
+
+[profile.release]
+lto = true

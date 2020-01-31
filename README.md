@@ -1,18 +1,14 @@
 # sharks-wasm
 
-[![CI](https://github.com/c0dearm/sharks-wask/workflows/Rust/badge.svg?branch=master)](https://github.com/c0dearm/sharks-wasm/actions)
+[![CI](https://github.com/c0dearm/sharks-wasm/workflows/Rust/badge.svg?branch=master)](https://github.com/c0dearm/sharks-wasm/actions)
 [![Codecov](https://codecov.io/gh/c0dearm/sharks-wasm/branch/master/graph/badge.svg)](https://codecov.io/gh/c0dearm/sharks-wasm)
-[![NPM](https://img.shields.io/crates/v/sharks.svg)](https://crates.io/crates/sharks)
 
 WebAssembly bindings for [Sharks](https://crates.io/crates/sharks)
-
-Documentation:
--    [API reference (docs.rs)](https://docs.rs/sharks)
 
 ## Usage
 
 ```
-const sharks_wasm = require('sharks_wasm');
+const sharks_wasm = require('@c0dearm/sharks-wasm');
 
 const sharks = sharks_wasm.SharksJS.new(3);
 const shares = sharks.deal([1, 2, 3, 4], 255);
