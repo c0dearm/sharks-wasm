@@ -2,12 +2,13 @@
 
 [![CI](https://github.com/c0dearm/sharks-wasm/workflows/Rust/badge.svg?branch=master)](https://github.com/c0dearm/sharks-wasm/actions)
 [![Codecov](https://codecov.io/gh/c0dearm/sharks-wasm/branch/master/graph/badge.svg)](https://codecov.io/gh/c0dearm/sharks-wasm)
+[![License](https://camo.githubusercontent.com/47069b7e06b64b608c692a8a7f40bc6915cf629c/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d417061636865322e302532464d49542d626c75652e737667)](https://github.com/c0dearm/sharks-wasm/blob/master/COPYRIGHT)
 
 WebAssembly bindings for [Sharks](https://crates.io/crates/sharks)
 
 ## Usage
 
-```
+```javascript
 const sharks_wasm = require('@c0dearm/sharks-wasm');
 
 const sharks = sharks_wasm.SharksJS.new(3);
