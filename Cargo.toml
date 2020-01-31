@@ -1,6 +1,6 @@
 [package]
 name = "sharks-wasm"
-version = "0.1.0"
+version = "0.1."
 authors = ["Aitor Ruano <codearm@pm.me>"]
 description = "WebAssembly bindings for [Sharks](https://crates.io/crates/sharks)"
 homepage = "https://github.com/c0dearm/sharks-wasm"
